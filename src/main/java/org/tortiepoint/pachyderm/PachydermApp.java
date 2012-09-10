@@ -60,8 +60,6 @@ public class PachydermApp {
             }
         }
 
-        if(true) throw new RuntimeException("powpers");
-
         return res;
     }
 

@@ -1,15 +1,16 @@
 package org.tortiepoint.pachyderm.dependency;
 
-import org.apache.maven.repository.internal.*;
+import org.apache.maven.repository.internal.DefaultServiceLocator;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainerException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.collection.CollectRequest;
 import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyNode;
-import org.sonatype.aether.impl.ArtifactDescriptorReader;
-import org.sonatype.aether.impl.VersionRangeResolver;
-import org.sonatype.aether.impl.VersionResolver;
 import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.resolution.ArtifactResult;
@@ -43,17 +44,12 @@ public class DependencyResolver {
         remoteRepositories.add(new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/"));
     }
 
-    public DependencyResolver() {
+    public DependencyResolver() throws PlexusContainerException, ComponentLookupException {
         DefaultServiceLocator locator = new DefaultServiceLocator();
         locator.addService(RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class);
 
-//        locator.addService(VersionRangeResolver.class, DefaultVersionRangeResolver.class);
-//        locator.addService(VersionResolver.class, DefaultVersionResolver.class);
-//        locator.addService(ArtifactDescriptorReader.class, DefaultArtifactDescriptorReader.class);
-
-        this.repositorySystem = locator.getService(RepositorySystem.class);
+        this.repositorySystem = new DefaultPlexusContainer().lookup( RepositorySystem.class );
     }
-
 
     public List<RemoteRepository> getRemoteRepositories() {
         return remoteRepositories;
@@ -63,12 +59,24 @@ public class DependencyResolver {
         return localRepository;
     }
 
-    public void addDependency(String groupId, String artifactId, String extension, String version) {
+    public void addDependency(String groupId, String artifactId, String extension, String version) throws DependencyResolutionException {
         try {
             resolveDependency(new Dependency(new DefaultArtifact(groupId, artifactId, extension, version), "runtime"));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DependencyResolutionException(String.format("Error resolving dependency %s:%s:%s",
+                    groupId, artifactId, version), e);
         }
+    }
+
+    public void addDependency(String dependency) throws DependencyResolutionException {
+        String[] tokens = dependency.split(":");
+
+        if(tokens.length != 3) {
+            throw new DependencyResolutionException("Dependency must be specified as groupId:artifactId:version",
+                    null);
+        }
+
+        addDependency(tokens[0], tokens[1], "jar", tokens[2]);
     }
 
     public void addRemoteRepository(String id, String url) {
