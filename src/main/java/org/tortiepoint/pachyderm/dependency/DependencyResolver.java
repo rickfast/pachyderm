@@ -1,5 +1,6 @@
 package org.tortiepoint.pachyderm.dependency;
 
+import org.apache.log4j.Logger;
 import org.apache.maven.repository.internal.DefaultServiceLocator;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.DefaultPlexusContainer;
@@ -35,6 +36,7 @@ import java.util.List;
  */
 public class DependencyResolver {
 
+    private static Logger log = Logger.getLogger(DependencyResolver.class);
     private RepositorySystem repositorySystem;
     private List<RemoteRepository> remoteRepositories = new ArrayList<RemoteRepository>();
     private LocalRepository localRepository =
@@ -45,9 +47,6 @@ public class DependencyResolver {
     }
 
     public DependencyResolver() throws PlexusContainerException, ComponentLookupException {
-        DefaultServiceLocator locator = new DefaultServiceLocator();
-        locator.addService(RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class);
-
         this.repositorySystem = new DefaultPlexusContainer().lookup( RepositorySystem.class );
     }
 
@@ -103,7 +102,7 @@ public class DependencyResolver {
 
         for (ArtifactResult artifactResult : dependencyResult.getArtifactResults()) {
             Artifact artifact = artifactResult.getArtifact();
-            System.out.println(String.format("Resolved %s:%s:%s", artifact.getGroupId(),
+            log.info(String.format("Resolved %s:%s:%s", artifact.getGroupId(),
                     artifact.getArtifactId(), artifact.getVersion()));
             addSoftwareLibrary(artifactResult.getArtifact().getFile());
         }
