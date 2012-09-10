@@ -8,8 +8,8 @@ Simple Example
 
 ```javascript
 app.get('/value/{p}', function(req, res) {
-var value = req.getParams().get("p");
+    var value = req.getParams().get("p");
 
-res.renderJson({"value":value});
+    res.renderJson({"value":value});
 });
 ```
