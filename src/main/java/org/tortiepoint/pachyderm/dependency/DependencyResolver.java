@@ -67,15 +67,13 @@ public class DependencyResolver {
         }
     }
 
-    public void addDependency(String dependency) throws DependencyResolutionException {
-        String[] tokens = dependency.split(":");
-
-        if(tokens.length != 3) {
-            throw new DependencyResolutionException("Dependency must be specified as groupId:artifactId:version",
-                    null);
+    public void addDependency(String coords) throws DependencyResolutionException {
+        try {
+            resolveDependency(new Dependency(new DefaultArtifact(coords), "runtime"));
+        } catch (Exception e) {
+            throw new DependencyResolutionException(String.format("Error resolving dependency %s",
+                    coords), e);
         }
-
-        addDependency(tokens[0], tokens[1], "jar", tokens[2]);
     }
 
     public void addRemoteRepository(String id, String url) {
