@@ -1,0 +1,10 @@
+<html>
+    <head>
+        <title>An error occurred</title>
+    </head>
+    <body>
+        <h1>Pachyderm</h1>
+        <p>Uh oh.</p>
+        <p>${errorMessage}</p>
+    </body>
+</html>
