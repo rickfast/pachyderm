@@ -1,6 +1,7 @@
 package org.tortiepoint.pachyderm;
 
 import org.springframework.util.AntPathMatcher;
+import org.tortiepoint.pachyderm.dependency.DependencyResolver;
 
 import javax.script.*;
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +19,10 @@ public class PachydermApp {
         try {
             this.scriptEngine.getContext().setAttribute("app", this,
                     ScriptContext.GLOBAL_SCOPE);
+            this.scriptEngine.getContext().setAttribute("maven", new DependencyResolver(), ScriptContext.GLOBAL_SCOPE);
             this.scriptEngine.getContext().setAttribute("out", System.out, ScriptContext.GLOBAL_SCOPE);
             this.scriptEngine.eval(new InputStreamReader(PachydermApp.class.getResourceAsStream(sourceFile)));
-        } catch (ScriptException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -57,6 +59,8 @@ public class PachydermApp {
                 e.printStackTrace();
             }
         }
+
+        if(true) throw new RuntimeException("powpers");
 
         return res;
     }

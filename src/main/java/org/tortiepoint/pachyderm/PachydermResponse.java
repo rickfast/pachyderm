@@ -15,17 +15,13 @@ public class PachydermResponse {
         this.statusCode = statusCode;
     }
 
-    public void renderJson(Object responseBody) {
+    public void renderJson(Object responseBody) throws Exception {
         contentType = "application/json";
 
-        try {
-            responseBody = responseBody instanceof NativeObject
+        responseBody = responseBody instanceof NativeObject
                     ? PachydermUtils.objectToMap((NativeObject)responseBody)
                     : responseBody;
-            body = new ObjectMapper().writeValueAsString(responseBody);
-        } catch (IOException e) {
-            statusCode = 500;
-        }
+        body = new ObjectMapper().writeValueAsString(responseBody);
     }
 
     public String getBody() {

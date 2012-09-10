@@ -1,5 +1,8 @@
 package org.tortiepoint.pachyderm;
 
+import groovy.text.SimpleTemplateEngine;
+import groovy.text.Template;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -7,6 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,16 +26,37 @@ import java.io.IOException;
 public class PachydermServlet extends HttpServlet {
 
     private PachydermApp app = new PachydermApp("/app.js");
+    private Template template;
+
+    {
+        Reader reader = new InputStreamReader(PachydermApp.class.getResourceAsStream("/error.template"));
+        SimpleTemplateEngine simpleTemplateEngine = new SimpleTemplateEngine();
+
+        try {
+            this.template = simpleTemplateEngine.createTemplate(reader);
+        } catch (IOException e) {
+
+        }
+    }
 
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        PachydermResponse response = app.getResponse(req.getPathInfo(), req);
+        try {
+            PachydermResponse response = app.getResponse(req.getPathInfo(), req);
+            int statusCode = response.getStatusCode();
 
-        res.setStatus(response.getStatusCode());
-        res.setContentType(response.getContentType());
+            res.setStatus(statusCode);
+            res.setContentType(response.getContentType());
 
-        if(res.getWriter() != null) {
-            res.getWriter().write(response.getBody());
+            if (res.getWriter() != null) {
+                res.getWriter().write(response.getBody());
+            }
+        } catch (Exception e) {
+            Map<String, String> bindings = new HashMap<String, String>();
+            bindings.put("errorMessage", e.getMessage());
+            String html = this.template.make(bindings).toString();
+
+            res.getWriter().write(html);
         }
     }
 }
