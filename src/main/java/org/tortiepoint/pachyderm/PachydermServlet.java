@@ -9,6 +9,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class PachydermServlet extends HttpServlet {
 
-    private PachydermApp app = new PachydermApp("/app.js");
+    private PachydermApp app;
     private Template template;
 
     {
@@ -39,10 +40,14 @@ public class PachydermServlet extends HttpServlet {
         }
     }
 
+    public PachydermServlet(PachydermApp app) {
+        this.app = app;
+    }
+
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         try {
-            PachydermResponse response = app.getResponse(req.getPathInfo(), req);
+            PachydermResponse response = app.getResponse(req.getMethod().toLowerCase(), req.getPathInfo(), req);
             int statusCode = response.getStatusCode();
 
             res.setStatus(statusCode);

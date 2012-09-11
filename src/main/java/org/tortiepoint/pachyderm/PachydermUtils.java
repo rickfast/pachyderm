@@ -22,6 +22,9 @@ public class PachydermUtils {
         return result;
     }
 
+    /**
+     * TODO handle complex objects
+     */
     public static Map<String,Object> objectToMap( NativeObject obj ) {
 
         HashMap<String,Object> map = new HashMap<String,Object>();

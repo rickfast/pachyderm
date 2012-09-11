@@ -50,14 +50,6 @@ public class DependencyResolver {
         this.repositorySystem = new DefaultPlexusContainer().lookup( RepositorySystem.class );
     }
 
-    public List<RemoteRepository> getRemoteRepositories() {
-        return remoteRepositories;
-    }
-
-    public LocalRepository getLocalRepository() {
-        return localRepository;
-    }
-
     public void addDependency(String groupId, String artifactId, String extension, String version) throws DependencyResolutionException {
         try {
             resolveDependency(new Dependency(new DefaultArtifact(groupId, artifactId, extension, version), "runtime"));

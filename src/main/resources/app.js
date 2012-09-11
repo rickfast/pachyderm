@@ -7,3 +7,11 @@ app.get('/poop/{p}', function(req, res) {
 
     res.renderJson({"value":22});
 });
+
+app.get('/pupe/{x}', function(req, res) {
+    res.renderXml({"value": req.getParams().get("x")});
+});
+
+app.get('/render', function(req, res) {
+    res.renderTemplate("sample.template", {poop: 'powpers'});
+});
