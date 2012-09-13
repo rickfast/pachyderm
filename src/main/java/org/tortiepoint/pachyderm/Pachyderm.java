@@ -25,6 +25,8 @@ public class Pachyderm {
             Context root = new Context(server, "/", Context.SESSIONS);
             PachydermApp app = new PachydermApp(file);
 
+            System.out.println("Resource base" + root.getResourceBase());
+
             root.addServlet(new ServletHolder(app.getServlet()), "/*");
 
             System.out.println(new File("temp").getAbsolutePath());

@@ -8,6 +8,8 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.xml.bind.JAXB;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -38,10 +40,12 @@ public class PachydermResponse {
 
     public void renderXml(Object responseBody) throws Exception {
         contentType = "application/xml";
-        responseBody = responseBody instanceof NativeObject
-                ? PachydermUtils.objectToMap((NativeObject) responseBody)
-                : responseBody;
+
         JAXB.marshal(responseBody, body);
+    }
+
+    public void render(String view, NativeObject model) throws Exception {
+        Map data = PachydermUtils.objectToMap(model);
     }
 
     public String getBody() {
