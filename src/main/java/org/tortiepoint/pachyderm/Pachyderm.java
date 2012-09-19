@@ -10,12 +10,11 @@ import java.io.FileNotFoundException;
 public class Pachyderm {
 
     public static void main(String[] args) {
-        Server server = new Server(8080);
-
         try {
             File file = new File(args[0]);
-            Context root = new Context(server, "/", Context.SESSIONS);
             PachydermApp app = new PachydermApp(file);
+            Server server = new Server(app.getPort());
+            Context root = new Context(server, "/", Context.SESSIONS);
 
             root.setResourceBase(file.getParentFile().getAbsolutePath());
             root.addServlet(new ServletHolder(app.getServlet()), "/*");

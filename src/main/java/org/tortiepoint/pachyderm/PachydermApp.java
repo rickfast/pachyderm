@@ -25,6 +25,7 @@ public class PachydermApp {
     private ScriptableObject scope;
     private RequestHandlerManager requestHandlerManager = new RequestHandlerManager();
     private ResponseRenderer responseRenderer;
+    private int port = 8080;
 
     PachydermApp(File file) throws FileNotFoundException, PachydermInitException {
         this(new FileReader(file), file.getParentFile().getPath());
@@ -89,5 +90,13 @@ public class PachydermApp {
         }
 
         responseRenderer.render(response, res.getData());
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

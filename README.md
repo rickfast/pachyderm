@@ -6,7 +6,7 @@ A Javascript micro web framework for the JVM.
 ```javascript
 // app.js
 app.get('/hello', function(req, res) {
-    res.render({ text: 'hello' }})
+    res.render({ text: 'hello' }});
 });
 ```
 
