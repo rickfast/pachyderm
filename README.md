@@ -6,10 +6,17 @@ A Javascript micro web framework for the JVM.
 Simple Example
 ==============
 
-The following ex
-
 ```javascript
-app.get('/data', function(req, res) {
-    res.render({ json: { data : "value" }})
+// app.js
+app.get('/hello', function(req, res) {
+    res.render({ text: 'hello' }})
 });
 ```
+
+Run using Pachyderm:
+
+```
+./bin/pachyderm ~/app.js
+```
+
+View response at (http://localhost:8080/hello)

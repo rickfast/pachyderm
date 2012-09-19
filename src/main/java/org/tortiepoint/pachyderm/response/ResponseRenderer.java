@@ -48,7 +48,9 @@ public class ResponseRenderer {
     public void render(HttpServletResponse servletResponse, NativeObject response) throws Exception {
         ResponseData responseData = new ResponseData(200);
 
-        if (response.containsKey("json")) {
+        if (response.containsKey("text")) {
+            responseData = new ResponseData(response.get("text").toString(), "text");
+        } else if (response.containsKey("json")) {
             responseData = renderJson(response.get("json"));
         } else if (response.containsKey("xml")) {
             responseData = renderXml(response.get("xml"));
