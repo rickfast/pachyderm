@@ -52,6 +52,14 @@ public class PachydermApp {
         return new PachydermServlet(this);
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public void get(String pattern, Object function) {
         requestHandlerManager.mapHandler("get", pattern, function);
     }
@@ -90,13 +98,5 @@ public class PachydermApp {
         }
 
         responseRenderer.render(response, res.getData());
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 }
