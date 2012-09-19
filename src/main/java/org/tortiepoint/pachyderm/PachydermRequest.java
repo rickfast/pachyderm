@@ -11,13 +11,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: rickfast
- * Date: 9/8/12
- * Time: 1:27 PM
- * To change this template use File | Settings | File Templates.
- */
 public class PachydermRequest implements ServletRequest {
 
     private ServletRequest delegate;
