@@ -1,5 +1,7 @@
 package org.tortiepoint.pachyderm;
 
+import org.apache.commons.io.IOUtils;
+
 import javax.servlet.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +34,10 @@ public class PachydermRequest implements ServletRequest {
 
     public void setParams(Map<String, String> params) {
         this.params = params;
+    }
+
+    public String getBody() throws IOException {
+        return IOUtils.toString(this.getInputStream());
     }
 
     @Override

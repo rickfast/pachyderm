@@ -1,13 +1,11 @@
 package org.tortiepoint.pachyderm;
 
 import com.thoughtworks.xstream.XStream;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJSON;
-import org.mozilla.javascript.NativeObject;
-import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.*;
 
-import java.util.Map;
+import java.io.FileReader;
 
 public class PachydermResponse {
 
@@ -16,6 +14,7 @@ public class PachydermResponse {
     private int statusCode = 200;
     private final Context context;
     private final ScriptableObject scope;
+    private final String _ = PachydermApp.class.getResource("/underscore.js").getFile();
 
     public PachydermResponse(Context context, ScriptableObject scope) {
         this.context = context;
@@ -59,7 +58,16 @@ public class PachydermResponse {
     }
 
     public void renderView(NativeObject model) throws Exception {
-        Map data = model;
+        Object data = model.get("model");
+        String view = model.get("view").toString();
+        String template = IOUtils.toString(new FileReader(view));
+
+        context.evaluateReader(scope, new FileReader(_), "underscore.js", 1, null);
+
+        Function function = (Function) ((ScriptableObject) scope.get("_")).get("template");
+
+        body = function.call(context, scope, scope, new Object[] { template, data }).toString();
+        contentType = "text/html";
     }
 
     public String getBody() {

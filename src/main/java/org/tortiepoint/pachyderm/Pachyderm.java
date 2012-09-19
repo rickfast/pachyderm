@@ -6,7 +6,6 @@ import org.mortbay.jetty.servlet.ServletHolder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +24,7 @@ public class Pachyderm {
             Context root = new Context(server, "/", Context.SESSIONS);
             PachydermApp app = new PachydermApp(file);
 
+            root.setResourceBase(file.getParentFile().getAbsolutePath());
             root.addServlet(new ServletHolder(app.getServlet()), "/*");
 
             server.start();
