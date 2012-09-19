@@ -3,9 +3,6 @@ pachyderm
 
 A Javascript micro web framework for the JVM.
 
-Simple Example
-==============
-
 ```javascript
 // app.js
 app.get('/hello', function(req, res) {
@@ -19,4 +16,4 @@ Run using Pachyderm:
 ./bin/pachyderm ~/app.js
 ```
 
-View response at (http://localhost:8080/hello)
+View response at [http://localhost:8080/hello](http://localhost:8080/hello)
