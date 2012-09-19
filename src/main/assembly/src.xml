@@ -9,6 +9,7 @@
         <fileSet>
             <directory>${project.build.directory}/appassembler</directory>
             <outputDirectory>/</outputDirectory>
+            <fileMode>744</fileMode>
         </fileSet>
     </fileSets>
 </assembly>
