@@ -6,11 +6,11 @@ import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ScriptableObject;
 import org.tortiepoint.pachyderm.dependency.DependencyResolver;
 import org.tortiepoint.pachyderm.handler.RequestHandlerManager;
+import org.tortiepoint.pachyderm.response.ResponseData;
 import org.tortiepoint.pachyderm.response.ResponseRenderer;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -76,8 +76,7 @@ public class PachydermApp {
         requestHandlerManager.mapHandler("delete", pattern, function);
     }
 
-    public void getResponse(String verb, String uri, HttpServletRequest request,
-                                         HttpServletResponse response) throws Exception {
+    public ResponseData getResponse(String verb, String uri, HttpServletRequest request) throws Exception {
         Map<String, String> params = PachydermUtils.extractParams(request);
         PachydermRequest req = new PachydermRequest(request);
         PachydermResponse res = new PachydermResponse();
@@ -97,6 +96,6 @@ public class PachydermApp {
             }
         }
 
-        responseRenderer.render(response, res.getData());
+        return responseRenderer.render(res.getData());
     }
 }

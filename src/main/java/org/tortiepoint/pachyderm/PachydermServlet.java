@@ -2,6 +2,7 @@ package org.tortiepoint.pachyderm;
 
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
+import org.tortiepoint.pachyderm.response.ResponseData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,7 +37,14 @@ public class PachydermServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         try {
-            app.getResponse(req.getMethod().toLowerCase(), req.getPathInfo(), req, res);
+            ResponseData responseData = app.getResponse(req.getMethod().toLowerCase(), req.getPathInfo(), req);
+
+            res.setStatus(responseData.getStatusCode());
+            res.setContentType(responseData.getContentType());
+
+            if (res.getWriter() != null) {
+                res.getWriter().write(responseData.getBody());
+            }
         } catch (Exception e) {
             Map<String, String> bindings = new HashMap<String, String>();
             bindings.put("errorMessage", e.getMessage());

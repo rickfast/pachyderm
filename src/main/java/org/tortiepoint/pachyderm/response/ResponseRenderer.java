@@ -45,7 +45,7 @@ public class ResponseRenderer {
         return new ResponseData(body, contentType);
     }
 
-    public void render(HttpServletResponse servletResponse, NativeObject response) throws Exception {
+    public ResponseData render(NativeObject response) throws Exception {
         ResponseData responseData = new ResponseData(200);
 
         if (response.containsKey("text")) {
@@ -60,14 +60,7 @@ public class ResponseRenderer {
             responseData = renderStatus((Integer) response.get("status"));
         }
 
-        int statusCode = responseData.getStatusCode();
-
-        servletResponse.setStatus(statusCode);
-        servletResponse.setContentType(responseData.getContentType());
-
-        if (servletResponse.getWriter() != null) {
-            servletResponse.getWriter().write(responseData.getBody());
-        }
+        return responseData;
     }
 
     private ResponseData renderView(NativeObject model) throws Exception {
