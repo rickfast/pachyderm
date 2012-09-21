@@ -18,11 +18,10 @@ Run using Pachyderm:
 
 View response at [http://localhost:8080/hello](http://localhost:8080/hello)
 
-Rendering views with underscore.js
+Rendering views
 -----------
 
-Pachyderm uses underscore.js templating for rendering views.  By default, views go in the /views folder relative to the
-the Javascript app code.
+Pachyderm uses underscore.js templating for rendering views.  By default, views go in the /views folder relative to the Javascript app code.
 
 ```javascript
 app.get('/example/{number}', function(req, res) {
@@ -32,7 +31,7 @@ app.get('/example/{number}', function(req, res) {
 });
 ```
 
-View code (in /views directory):
+View code (in views directory):
 
 ```js+erb
 <!-- views/example.html -->
@@ -77,11 +76,11 @@ app.get('/email', function(req, res) {
 Configuring Pachyderm
 ---------------------
 
-'''javascript
+```javascript
 // set the port to 8181
 config.setPort(8181);
 
 app.get('/', function(req, res) {
     res.render({ text: 'port changed to 8181' });
 }
-'''
+```
