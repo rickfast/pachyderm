@@ -22,7 +22,7 @@ public class PachydermAppTest {
             Assert.assertEquals("hello", responseData.getBody());
             Assert.assertEquals(200, responseData.getStatusCode());
             Assert.assertEquals("text", responseData.getContentType());
-        } catch (PachydermInitException e) {
+        } catch (PachydermException e) {
             Assert.fail("Pachyderm failed to initialize: " + e.getMessage());
         } catch (Exception e) {
             Assert.fail("Failed getting response: " + e.getMessage());

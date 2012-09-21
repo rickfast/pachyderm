@@ -27,11 +27,11 @@ public class PachydermApp {
     private ResponseRenderer responseRenderer;
     private PachydermConfig config;
 
-    PachydermApp(File file) throws FileNotFoundException, PachydermInitException {
+    PachydermApp(File file) throws FileNotFoundException, PachydermException {
         this(new FileReader(file), file.getParentFile().getPath());
     }
 
-    PachydermApp(Reader reader, String path) throws PachydermInitException {
+    PachydermApp(Reader reader, String path) throws PachydermException {
         try {
             context = Context.enter();
             scope = context.initStandardObjects();
@@ -46,7 +46,7 @@ public class PachydermApp {
             context.evaluateReader(scope, reader, "app.js", 1, null);
             log.info(String.format("Working directory: %s", path));
         } catch (Exception e) {
-            throw new PachydermInitException("Error initializing application", e);
+            throw new PachydermException("Error initializing application", e);
         }
     }
 
@@ -92,6 +92,8 @@ public class PachydermApp {
             } finally {
                 Context.exit();
             }
+        } else {
+            throw new PachydermException(String.format("No handler found for mapping (%s) %s", verb, uri), null);
         }
 
         return responseRenderer.render(res.getData());
