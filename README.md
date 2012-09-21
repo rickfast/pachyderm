@@ -33,7 +33,7 @@ app.get('/example/{number}', function(req, res) {
 
 View code (in /views directory):
 
-```html
+```js+erb
 <li><%= someValue %></li>
 ```
 
