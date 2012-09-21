@@ -7,15 +7,24 @@ import org.mozilla.javascript.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class ResponseRenderer {
     private ScriptableObject scope;
     private String path;
-    private static final String _ = ResponseRenderer.class.getResource("/underscore.js").getFile();
 
     public ResponseRenderer(ScriptableObject scope, String path) {
         this.scope = scope;
         this.path = path;
+
+        try {
+            final String _ = ResponseRenderer.class.getResource("/underscore.js").getFile();
+            Context.enter().evaluateReader(scope, new FileReader(_), "underscore.js", 1, null);
+        } catch (IOException e) {
+
+        } finally {
+            Context.exit();
+        }
     }
 
     public ResponseData renderStatus(int statusCode) {
@@ -68,11 +77,7 @@ public class ResponseRenderer {
         String view = model.get("view").toString();
         String template = IOUtils.toString(new FileReader(String.format("%s/views/%s", path, view)));
         Context context = Context.enter();
-
-        context.evaluateReader(scope, new FileReader(_), "underscore.js", 1, null);
-
         Function function = (Function) ((ScriptableObject) scope.get("_")).get("template");
-
         ResponseData responseData = new ResponseData(function.call(context, scope,
                 scope, new Object[]{template, data}).toString(), "text/html");
 

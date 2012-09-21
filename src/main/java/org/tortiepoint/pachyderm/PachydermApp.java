@@ -25,7 +25,7 @@ public class PachydermApp {
     private ScriptableObject scope;
     private RequestHandlerManager requestHandlerManager = new RequestHandlerManager();
     private ResponseRenderer responseRenderer;
-    private int port = 8080;
+    private PachydermConfig config;
 
     PachydermApp(File file) throws FileNotFoundException, PachydermInitException {
         this(new FileReader(file), file.getParentFile().getPath());
@@ -36,10 +36,12 @@ public class PachydermApp {
             context = Context.enter();
             scope = context.initStandardObjects();
             responseRenderer = new ResponseRenderer(scope, path);
+            config = new PachydermConfig(path + "/views", path + "/public");
 
             ScriptableObject.putProperty(scope, "app", Context.javaToJS(this, scope));
             ScriptableObject.putProperty(scope, "maven", Context.javaToJS(new DependencyResolver(), scope));
             ScriptableObject.putProperty(scope, "out", Context.javaToJS(System.out, scope));
+            ScriptableObject.putProperty(scope, "config", Context.javaToJS(config, scope));
 
             context.evaluateReader(scope, reader, "app.js", 1, null);
             log.info(String.format("Working directory: %s", path));
@@ -50,14 +52,6 @@ public class PachydermApp {
 
     Servlet getServlet() throws Exception {
         return new PachydermServlet(this);
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     public void get(String pattern, Object function) {
@@ -74,6 +68,10 @@ public class PachydermApp {
 
     public void delete(String pattern, Object function) {
         requestHandlerManager.mapHandler("delete", pattern, function);
+    }
+
+    public PachydermConfig getConfig() {
+        return config;
     }
 
     public ResponseData getResponse(String verb, String uri, HttpServletRequest request) throws Exception {

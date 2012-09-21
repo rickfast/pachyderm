@@ -13,10 +13,10 @@ public class Pachyderm {
         try {
             File file = new File(args[0]);
             PachydermApp app = new PachydermApp(file);
-            Server server = new Server(app.getPort());
+            Server server = new Server(app.getConfig().getPort());
             Context root = new Context(server, "/", Context.SESSIONS);
 
-            root.setResourceBase(file.getParentFile().getAbsolutePath());
+            root.setResourceBase(app.getConfig().getPublicFolder());
             root.addServlet(new ServletHolder(app.getServlet()), "/*");
 
             server.start();
