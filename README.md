@@ -21,7 +21,8 @@ View response at [http://localhost:8080/hello](http://localhost:8080/hello)
 Rendering views with underscore.js
 -----------
 
-Web service code:
+Pachyderm uses underscore.js templating for rendering views.  By default, views go in the /views folder relative to the
+the Javascript app code.
 
 ```javascript
 app.get('/example/{number}', function(req, res) {
@@ -34,6 +35,7 @@ app.get('/example/{number}', function(req, res) {
 View code (in /views directory):
 
 ```js+erb
+<!-- views/example.html -->
 <li><%= someValue %></li>
 ```
 
@@ -50,7 +52,7 @@ app.get('/example', function(req, res) {
 
 View response at [http://localhost:8080/example](http://localhost:8080/example)
 
-Resolving Maven dependencies
+Resolving Java dependencies
 ----------------------------
 
 Pachyderm can resolve Java dependencies at runtime:
@@ -71,3 +73,15 @@ app.get('/email', function(req, res) {
 	email.send();
 });
 ```
+
+Configuring Pachyderm
+---------------------
+
+'''javascript
+// set the port to 8181
+config.setPort(8181);
+
+app.get('/', function(req, res) {
+    res.render({ text: 'port changed to 8181' });
+}
+'''
