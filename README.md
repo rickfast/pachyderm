@@ -1,7 +1,7 @@
 Pachyderm
 =========
 
-A Javascript micro web framework for the JVM.
+A Javascript micro web framework for the JVM.  Download/Installation instructions [here](https://github.com/rickfast/pachyderm/wiki/Installation).
 
 ```javascript
 // app.js
